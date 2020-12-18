@@ -9,6 +9,9 @@ const bodyParser = require("body-parser")
 
 const route = require("./routes/index");
 const cors = require("cors");
+
+
+
 app.use(bodyParser.json());
 app.use(cors());
 

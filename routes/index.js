@@ -6,7 +6,7 @@ const shortId = require("shortid");
 
 const URL = require("../models/urlSchema");
 
-
+const rateLimiter = require("express-rate-limit");
 
 const URI = process.env.DB_URI;
 /*connecting the database*/
@@ -46,7 +46,14 @@ router.get("/:short_url?",async (req,res,next) =>{
 
 
 
-router.post("/new",async (req,res,next) =>{
+/*if gets more than 5 request in a single minute*/
+const postLimiter = rateLimiter({
+  windowMs : 1 * 60 * 1000,   /*one minute*/
+  max : 10,
+  message : "Only 10 post request per minute is allowed!"
+})
+
+router.post("/new", postLimiter,async (req,res,next) =>{
   console.log(req.body)
   console.log("reached")
   const url = req.body.url
