@@ -1,22 +1,23 @@
-// server.js
-// where your node app starts
-
-// we've started you off with Express (https://expressjs.com/)
-// but feel free to use whatever libraries or frameworks you'd like through `package.json`.
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser")
 
-const route = require("./routes/index");
+const getMethod = require("./controller/get");
+const postMethod = require("./controller/post")
 const cors = require("cors");
 
+const limiter = require("./validators/postLimiter"); 
 
+const jsonParser = bodyParser.json()
 
-app.use(bodyParser.json());
+app.use(jsonParser);
 app.use(cors());
 
 /*middleware for GET request*/
-app.use("/",route)
+app.get("/:short_url?",jsonParser,getMethod.shortURLParse)
+
+/*middleware for POST request*/
+app.post("/new",jsonParser,limiter.postLimiter,postMethod.postURL)
 
 
 // listen for requests :)
