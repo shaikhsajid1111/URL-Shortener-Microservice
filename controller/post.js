@@ -37,7 +37,7 @@ const postURL = async (req,res) =>{
       if (findOne) {
         res.json({
           original_url: findOne.original_url,
-          short_url: findOne.short_url
+          short_url: `elfinsurl.tk/${findOne.short_url}`
         })
       } else {
         /**if URL is valid and does not exists in database */
@@ -45,14 +45,15 @@ const postURL = async (req,res) =>{
         /**create a new instance of URL model*/
         let newOne = new URL({
           original_url: url,
-          short_url: urlCode
+          short_url: `elfinsurl.tk/${urlCode}`
         })
         /**save it to database */
         await newOne.save()
+        
         /**send the shortID and the original URL to the user */
         res.json({
           original_url: newOne.original_url,
-          short_url: newOne.short_url
+          short_url: `elfinsurl.tk/${newOne.short_url}`
         })
       }
       
